@@ -1,0 +1,12 @@
+{
+  "name": "super-donuts",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "serve ./",
+    "build": "echo 'Build completed'",
+    "deploy": "echo 'Skipping deployment'"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+} 
