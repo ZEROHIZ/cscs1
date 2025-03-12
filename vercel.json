@@ -1,17 +1,19 @@
 {
+  "version": 2,
   "routes": [
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/.*",
-      "dest": "/index.html"
+      "src": "/(.*)",
+      "dest": "/$1",
+      "headers": {
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; frame-src https://html-classic.itch.zone; style-src 'self' 'unsafe-inline';"
+      }
     }
   ],
-  "builds": [
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    }
-  ]
-} 
+  "github": {
+    "silent": true
+  }
+}
