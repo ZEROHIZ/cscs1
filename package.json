@@ -4,9 +4,11 @@
   "scripts": {
     "start": "serve ./",
     "build": "echo 'Build completed'",
-    "deploy": "echo 'Skipping deployment'"
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
   },
   "devDependencies": {
-    "serve": "^14.2.0"
+    "serve": "^14.2.0",
+    "wrangler": "^3.114.1"
   }
-} 
+}
