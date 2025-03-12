@@ -7,20 +7,14 @@ export default {
     if (path === "/" || !path.includes('.')) {
       path = "/index.html";
     }
-    
-    // 构建文件路径
-    const filePath = path;
-    
+
     try {
-      // 尝试从静态资源中获取文件
-      const response = await fetch(`https://example.com${filePath}`);
+      // 直接从 Worker 资源中获取文件
+      const file = await env.ASSETS.fetch(new Request(path));
       
-      if (response.ok) {
-        // 根据文件扩展名设置正确的 Content-Type
-        const contentType = getContentType(filePath);
-        
-        // 返回文件内容
-        return new Response(await response.text(), {
+      if (file.ok) {
+        const contentType = getContentType(path);
+        return new Response(await file.text(), {
           headers: {
             "Content-Type": contentType,
             "Cache-Control": "public, max-age=3600"
@@ -28,15 +22,24 @@ export default {
         });
       }
     } catch (e) {
-      // 忽略错误，继续处理
+      console.error('Error serving file:', e);
     }
-    
-    // 如果文件不存在，返回 index.html 的内容
+
+    // 如果是其他路径，尝试返回 index.html
     if (path !== "/index.html") {
-      return fetch(request.url.replace(path, "/index.html"));
+      try {
+        const indexFile = await env.ASSETS.fetch(new Request("/index.html"));
+        return new Response(await indexFile.text(), {
+          headers: {
+            "Content-Type": "text/html",
+            "Cache-Control": "public, max-age=3600"
+          }
+        });
+      } catch (e) {
+        console.error('Error serving index.html:', e);
+      }
     }
-    
-    // 如果 index.html 也不存在，返回 404
+
     return new Response("Not Found", { status: 404 });
   }
 };
